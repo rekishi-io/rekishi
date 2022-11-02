@@ -1,3 +1,5 @@
+// https://github.com/shadcn/taxonomy/blob/main/lib/api-middlewares/with-methods.ts
+
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
 export function withMethods(methods: string[], handler: NextApiHandler) {
