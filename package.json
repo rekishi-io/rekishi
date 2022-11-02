@@ -30,7 +30,7 @@
     "simple-git-hooks": "^2.8.1"
   },
   "lint-staged": {
-    "(src)/**/*.{js,ts,jsx,tsx}": [
+    "**/*.{js,ts,jsx,tsx}": [
       "prettier --write",
       "eslint --fix"
     ],
