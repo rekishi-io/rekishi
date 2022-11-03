@@ -24,6 +24,7 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@prisma/client": "^4.5.0",
     "@stepci/runner": "^1.5.5",
     "eslint": "8.26.0",
     "eslint-config-next": "13.0.1",

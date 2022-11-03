@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { run, Workflow } from "@stepci/runner";
 
-test("example test", async () => {
+test("API: organization", async () => {
   const workflow: Workflow = {
     version: "1.1",
     name: "Status Test",
@@ -16,12 +16,17 @@ test("example test", async () => {
             http: {
               url: "http://{{env.host}}/api/v1/organizations",
               method: "POST",
-              body: JSON.stringify({ id: "this is id" }),
+              body: JSON.stringify({
+                organization_id: "id_1",
+                name: "new org",
+              }),
               headers: { "Content-Type": "application/json" },
               check: {
                 status: 200,
                 json: {
-                  id: "id_1",
+                  organization_id: "id_1",
+                  name: "new org",
+                  object: "organization",
                 },
               },
             },

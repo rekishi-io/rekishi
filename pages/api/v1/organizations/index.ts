@@ -3,26 +3,43 @@ import { z } from "zod";
 import { withMethods } from "lib/api-middleware/with-methods";
 import { withValidation } from "lib/api-middleware/with-validation";
 import { NextApiHandler } from "next";
+import { prisma } from "lib/prisma";
 
 const postHandlerInput = z.object({
   body: z.object({
-    id: z.string(),
+    organization_id: z.string().min(1),
     name: z.string().optional(),
   }),
 });
 
 const postHandlerOutput = z.object({
-  id: z.string(),
+  organization_id: z.string(),
   name: z.string().optional(),
   created_at: z.date().optional(),
   updated_at: z.date().optional(),
+  object: z.enum(["organization"]),
 });
 
 const postHandler = withValidation(
   postHandlerInput,
   postHandlerOutput,
-  (req, res) => {
-    res.status(200).json({ id: "id_1" });
+  async (req, res) => {
+    const org = await prisma.organization.upsert({
+      where: { org_id: req.body.organization_id },
+      create: { org_id: req.body.organization_id, name: req.body.name },
+      update: { name: req.body.name },
+    });
+
+    // TODO
+    if (!org) {
+      throw new Error("Create organization failed");
+    }
+
+    res.status(200).json({
+      organization_id: org.org_id,
+      name: org?.name ?? undefined,
+      object: "organization",
+    });
   },
 );
 
