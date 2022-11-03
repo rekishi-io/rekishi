@@ -12,12 +12,17 @@ test("example test", async () => {
       example: {
         steps: [
           {
-            name: "GET request",
+            name: "POST request",
             http: {
-              url: "http://{{env.host}}/api/hello",
-              method: "GET",
+              url: "http://{{env.host}}/api/v1/organizations",
+              method: "POST",
+              body: JSON.stringify({ id: "this is id" }),
+              headers: { "Content-Type": "application/json" },
               check: {
                 status: 200,
+                json: {
+                  id: "id_1",
+                },
               },
             },
           },
