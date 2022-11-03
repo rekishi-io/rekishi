@@ -14,6 +14,8 @@ const postHandlerInput = z.object({
   }),
 });
 
+export type PostHandlerInput = z.infer<typeof postHandlerInput>;
+
 const postHandlerOutput = z.object({
   organization_id: z.string(),
   user_id: z.string().min(1),
@@ -29,6 +31,7 @@ const postHandler = withValidation(
     const org = await prisma.organization.findUnique({
       where: { org_id: req.body.organization_id },
     });
+
     // TODO
     if (!org) {
       throw new Error("org not found");
