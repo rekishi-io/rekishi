@@ -16,9 +16,6 @@ const bodySchema = z.object({
 
 type BodySchema = z.infer<typeof bodySchema>;
 
-export default withMethods(
-  ["GET", "POST"],
-  withValidation(bodySchema, (req, res) => {
-    res.status(200).json({ name: "John Doe", title: req.body.title });
-  }),
-);
+export default withMethods(["GET", "POST"], (req, res) => {
+  res.status(200).json({ name: "John Doe", title: req.body.title });
+});

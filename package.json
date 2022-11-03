@@ -24,6 +24,7 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@stepci/runner": "^1.5.5",
     "eslint": "8.26.0",
     "eslint-config-next": "13.0.1",
     "eslint-config-prettier": "^8.5.0",
