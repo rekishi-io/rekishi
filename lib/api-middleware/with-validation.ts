@@ -1,15 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { z, ZodSchema } from "zod";
 
-export function withValidation<T extends ZodSchema>(
-  schema: T,
+export function withValidation<T extends ZodSchema, U extends ZodSchema>(
+  input: T,
+  output: U,
   next: (
     req: Omit<NextApiRequest, "query" | "body"> & z.infer<T>,
-    res: NextApiResponse,
+    res: NextApiResponse<z.infer<U>>,
   ) => unknown | Promise<unknown>,
 ) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    const parsed = schema.safeParse(req);
+    const parsed = input.safeParse(req);
     if (!parsed.success) {
       res.status(400).json({
         message: "Bad Request",
