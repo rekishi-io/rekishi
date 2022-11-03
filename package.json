@@ -9,7 +9,8 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
-    "types": "tsc --noEmit"
+    "types": "tsc --noEmit",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@types/node": "18.11.9",
@@ -28,7 +29,8 @@
     "eslint-config-prettier": "^8.5.0",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
-    "simple-git-hooks": "^2.8.1"
+    "simple-git-hooks": "^2.8.1",
+    "vitest": "^0.24.5"
   },
   "lint-staged": {
     "**/*.{js,ts,jsx,tsx}": [
