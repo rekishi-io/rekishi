@@ -5,7 +5,29 @@ import { NextApiHandler } from "next";
 import { prisma } from "lib/prisma";
 
 const logsPostHandlerInput = z.object({
-  body: z.object({}),
+  body: z.object({
+    organization_id: z.string().min(1),
+    method: z.enum(["GET", "POST", "PUT", "DELETE"]),
+    event: z.object({
+      action: z.string(),
+      actor: z.object({
+        id: z.string().min(1),
+      }),
+      targets: z.array(
+        z.object({
+          type: z.string(),
+          id: z.string().min(1),
+        }),
+      ),
+      context: z
+        .object({
+          location: z.string(),
+          user_agenet: z.string(),
+        })
+        .optional(),
+      metaData: z.object({}).optional(),
+    }),
+  }),
 });
 
 const logsPostHandlerOutput = z.object({});
@@ -13,7 +35,9 @@ const logsPostHandlerOutput = z.object({});
 const postHandler = withValidation(
   logsPostHandlerInput,
   logsPostHandlerOutput,
-  async (req, res) => {},
+  async (req, res) => {
+    res.json(req.body);
+  },
 );
 
 const handler: NextApiHandler = (req, res) => {
