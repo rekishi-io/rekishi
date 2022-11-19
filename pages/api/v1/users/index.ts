@@ -8,37 +8,60 @@ import { prisma } from "lib/prisma";
 const postHandlerInput = z.object({
   body: z.object({
     organization_id: z.string().min(1),
-    name: z.string().optional(),
+    user_id: z.string().min(1),
+    name: z.string().min(1).optional(),
+    email: z.string().email().optional(),
   }),
 });
 
+export type PostHandlerInput = z.infer<typeof postHandlerInput>;
+
 const postHandlerOutput = z.object({
   organization_id: z.string(),
-  name: z.string().optional(),
-  created_at: z.date().optional(),
-  updated_at: z.date().optional(),
-  object: z.enum(["organization"]),
+  user_id: z.string().min(1),
+  name: z.string().min(1).optional(),
+  email: z.string().email().optional(),
+  object: z.enum(["user"]),
 });
 
 const postHandler = withValidation(
   postHandlerInput,
   postHandlerOutput,
   async (req, res) => {
-    const org = await prisma.organization.upsert({
+    const org = await prisma.organization.findUnique({
       where: { org_id: req.body.organization_id },
-      create: { org_id: req.body.organization_id, name: req.body.name },
-      update: { name: req.body.name },
     });
 
     // TODO
     if (!org) {
+      throw new Error("org not found");
+    }
+
+    const user = await prisma.user.upsert({
+      where: { user_id: req.body.user_id },
+      create: {
+        user_id: req.body.user_id,
+        name: req.body.name,
+        email: req.body.email,
+        organizationId: org.id,
+      },
+      update: {
+        name: req.body.name,
+        email: req.body.email,
+      },
+    });
+
+    // TODO
+    if (!user) {
       throw new Error("Create organization failed");
     }
 
     res.status(200).json({
+      object: "user",
       organization_id: org.org_id,
-      name: org?.name ?? undefined,
-      object: "organization",
+      user_id: user.user_id,
+      email: user.email ?? undefined,
+      name: user.name ?? undefined,
     });
   },
 );

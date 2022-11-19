@@ -12,6 +12,7 @@ export function withValidation<T extends ZodSchema, U extends ZodSchema>(
   return async (req: NextApiRequest, res: NextApiResponse) => {
     const parsed = input.safeParse(req);
     if (!parsed.success) {
+      console.log(parsed.error.message);
       res.status(400).json({
         message: "Bad Request",
         issues: JSON.parse(parsed.error.message),
