@@ -37,7 +37,7 @@ const postHandler = withValidation(
       throw new Error("org not found");
     }
 
-    const user = await prisma.endUser.upsert({
+    const user = await prisma.user.upsert({
       where: { user_id: req.body.user_id },
       create: {
         user_id: req.body.user_id,
