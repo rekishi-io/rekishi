@@ -36,7 +36,16 @@ const postHandler = withValidation(
   logsPostHandlerInput,
   logsPostHandlerOutput,
   async (req, res) => {
-    res.json(req.body);
+    const org = await prisma.organization.findUnique({
+      where: { org_id: req.body.organization_id },
+    });
+
+    // TODO
+    if (!org) throw new Error("Organization not found.");
+
+    const log = await prisma.log.create({ data: {} });
+
+    res.json(log);
   },
 );
 

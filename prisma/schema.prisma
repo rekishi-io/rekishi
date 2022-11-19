@@ -33,3 +33,7 @@ model User {
 
   @@map("users")
 }
+
+model Log {
+  id String @id @default(cuid())
+}
